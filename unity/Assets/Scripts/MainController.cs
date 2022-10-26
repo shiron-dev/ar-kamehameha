@@ -27,6 +27,8 @@ public class MainController : MonoBehaviour
 
     [SerializeField]
     private Transform headTF;
+    [SerializeField]
+    private Transform headScale;
 
     [SerializeField]
     private float headRatio = 1.5f;
@@ -59,6 +61,7 @@ public class MainController : MonoBehaviour
         float bottom = markerPos[10].y;
         float size = Mathf.Abs(top - bottom);
         headTF.localPosition = new Vector3(markerPos[0].x, top + size * (headRatio - 1), 0);
+        headScale.localScale = new Vector3(size, size, size);
     }
 
     private void OnDestroy()
