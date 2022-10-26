@@ -3,6 +3,13 @@ import dlib  # 機械学習系ライブラリ
 import imutils  # OpenCVの補助
 from imutils import face_utils
 import numpy as np
+from socket import socket, AF_INET, SOCK_DGRAM
+
+HOST = ''
+PORT = 5000
+ADDRESS = "127.0.0.1"
+
+s = socket(AF_INET, SOCK_DGRAM)
 
 # VideoCapture オブジェクトを取得します
 DEVICE_ID = 0  # ID 0は標準web cam
@@ -90,9 +97,11 @@ while (True):  # カメラから連続で画像を取得する
         (nose_end_point2D, _) = cv2.projectPoints(np.array([(0.0, 0.0, 500.0)]), rotation_vector,
                                                   translation_vector, camera_matrix, dist_coeffs)
         # 計算に使用した点のプロット/顔方向のベクトルの表示
-        for p in image_points:
+        for i, p in enumerate(image_points):
             cv2.drawMarker(frame, (int(p[0]), int(p[1])), (0.0, 1.409845, 255), markerType=cv2.MARKER_CROSS,
                            thickness=1)
+
+            s.sendto('{}:{},{}'.format(i, int(p[0]), int(p[1])).encode(), (ADDRESS, PORT))
 
         p1 = (int(image_points[0][0]), int(image_points[0][1]))
         p2 = (int(nose_end_point2D[0][0][0]), int(nose_end_point2D[0][0][1]))
@@ -105,3 +114,4 @@ while (True):  # カメラから連続で画像を取得する
 
 capture.release()  # video captureを終了する
 cv2.destroyAllWindows()  # windowを閉じる
+s.close()
