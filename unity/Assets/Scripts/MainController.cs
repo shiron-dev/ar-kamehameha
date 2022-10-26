@@ -33,6 +33,8 @@ public class MainController : MonoBehaviour
     [SerializeField]
     private float headRatio = 1.5f;
 
+    private Vector3 faceWay;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -77,6 +79,11 @@ public class MainController : MonoBehaviour
         string[] parseMsg = strMsg.Split(":");
         int objIndex = int.Parse(parseMsg[0]);
         string[] strPos = parseMsg[1].Split(",");
+        if(objIndex == 101)
+        {
+            faceWay = new(float.Parse(strPos[0]), float.Parse(strPos[1]), float.Parse(strPos[2]));
+            return;
+        }
         Vector2 pos = new((float.Parse(strPos[0])- CAM_WIDTH / 2) * CAM_SCALE, (CAM_HEIGHT / 2 - float.Parse(strPos[1])) * CAM_SCALE);
 
         markerPos[objIndex] = new Vector3(pos.x, pos.y, 0);

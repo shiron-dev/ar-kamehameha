@@ -104,6 +104,8 @@ while (True):  # カメラから連続で画像を取得する
 
             s.sendto('{}:{},{}'.format(i, int(p[0]), int(p[1])).encode(), (ADDRESS, PORT))
 
+        s.sendto('{}:{},{},{}'.format(101, int(yaw), int(pitch), int(roll)).encode(), (ADDRESS, PORT))
+
         p1 = (int(image_points[0][0]), int(image_points[0][1]))
         p2 = (int(nose_end_point2D[0][0][0]), int(nose_end_point2D[0][0][1]))
 
