@@ -4,6 +4,7 @@ import imutils  # OpenCVの補助
 from imutils import face_utils
 import numpy as np
 from socket import socket, AF_INET, SOCK_DGRAM
+import os
 
 HOST = ''
 PORT = 5000
@@ -14,7 +15,7 @@ s = socket(AF_INET, SOCK_DGRAM)
 # VideoCapture オブジェクトを取得します
 DEVICE_ID = 0  # ID 0は標準web cam
 capture = cv2.VideoCapture(DEVICE_ID)  # dlibの学習済みデータの読み込み
-predictor_path = "data/shape_predictor_68_face_landmarks.dat"
+predictor_path = os.path.join(os.path.dirname(__file__), "data/shape_predictor_68_face_landmarks.dat")
 
 detector = dlib.get_frontal_face_detector()  # 顔検出器の呼び出し。ただ顔だけを検出する。
 predictor = dlib.shape_predictor(predictor_path)  # 顔から目鼻などランドマークを出力する
