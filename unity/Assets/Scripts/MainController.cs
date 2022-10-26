@@ -25,6 +25,12 @@ public class MainController : MonoBehaviour
     [SerializeField]
     private GameObject markerPrefab;
 
+    [SerializeField]
+    private Transform headTF;
+
+    [SerializeField]
+    private float headRatio = 1.5f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +55,10 @@ public class MainController : MonoBehaviour
                 markerTF[i].transform.localPosition = markerPos[i];
             }
         }
+        float top = (markerPos[1].y + markerPos[2].y) / 2;
+        float bottom = markerPos[10].y;
+        float size = Mathf.Abs(top - bottom);
+        headTF.localPosition = new Vector3(markerPos[0].x, top + size * (headRatio - 1), 0);
     }
 
     private void OnDestroy()
@@ -64,6 +74,9 @@ public class MainController : MonoBehaviour
         string[] parseMsg = strMsg.Split(":");
         int objIndex = int.Parse(parseMsg[0]);
         string[] strPos = parseMsg[1].Split(",");
-        markerPos[objIndex] = new Vector3((CAM_WIDTH / 2 - float.Parse(strPos[0])) * CAM_SCALE, (CAM_HEIGHT / 2 - float.Parse(strPos[1])) * CAM_SCALE, 0);
+        Vector2 pos = new((float.Parse(strPos[0])- CAM_WIDTH / 2) * CAM_SCALE, (CAM_HEIGHT / 2 - float.Parse(strPos[1])) * CAM_SCALE);
+
+        markerPos[objIndex] = new Vector3(pos.x, pos.y, 0);
+
     }
 }
