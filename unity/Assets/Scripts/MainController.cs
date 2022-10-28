@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Timeline;
 using UnityEngine;
 
 public class MainController : MonoBehaviour
@@ -29,7 +28,21 @@ public class MainController : MonoBehaviour
     [SerializeField]
     private float triggerDist = 0.2f;
     [SerializeField]
-    private GameObject kamehameha;
+    private float releaseDist = 8;
+    [SerializeField]
+    private float releaseTriggerDist = 6;
+
+    [SerializeField]
+    private GameObject kamehame_charge;
+    [SerializeField]
+    private GameObject kamehame_beam;
+
+    private Vector3 chargeSize;
+
+    private const float DIS_CHARGE_TIME = 1.5f;
+    private float disChargeTime = 0;
+    private const float CHARGE_TIME = 1.5f;
+    private float chargeTime = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +50,8 @@ public class MainController : MonoBehaviour
         udpController = new UDPController(UDP_IP, UDP_PORT);
         udpController.Received += ReseiveUDP;
         udpController.ListenStart();
+
+        chargeSize = kamehame_charge.transform.localScale;
 
         /*
         for (int i = 0; i < MARKER_NUM; i++)
@@ -58,19 +73,34 @@ public class MainController : MonoBehaviour
             }
         }
 
+        disChargeTime += Time.deltaTime;
+        if (disChargeTime >= DIS_CHARGE_TIME)
+        {
+            kamehame_beam.SetActive(false);
+            kamehame_charge.SetActive(false);
+            chargeTime = 0;
+        }
         // 左右の距離確認
         if (markerPos[9] != Vector3.zero)
         {
-            if(triggerDist >= Vector3.Distance(markerPos[9], markerPos[10]))
+            if ((kamehame_beam.activeSelf ? releaseTriggerDist : triggerDist) >= Vector3.Distance(markerPos[9], markerPos[10]))
             {
-                Debug.Log("TRIGGERD");
-                kamehameha.SetActive(true);
-            }
-            else
-            {
-                kamehameha.SetActive(false);
+                kamehame_charge.transform.localScale = chargeSize;
+                disChargeTime = 0;
+                chargeTime += Time.deltaTime;
+                if (chargeTime >= CHARGE_TIME)
+                {
+                    float hX = (markerPos[9].x + markerPos[10].x) / 2;
+                    float sX = (markerPos[5].x + markerPos[6].x) / 2;
+                    if (releaseDist <= Mathf.Abs(hX - sX))
+                    {
+                        kamehame_beam.SetActive(true);
+                        kamehame_beam.transform.rotation = Quaternion.Euler(0, hX > sX ? 0 : 180, 0);
+                    }
+                }
             }
         }
+        kamehame_charge.transform.localScale = chargeSize * (1 - disChargeTime / DIS_CHARGE_TIME);
     }
 
     private void OnDestroy()
@@ -86,7 +116,7 @@ public class MainController : MonoBehaviour
         string[] parseMsg = strMsg.Split(":");
         int objIndex = int.Parse(parseMsg[0]);
         string[] strPos = parseMsg[1].Split(",");
-        Vector2 pos = new((float.Parse(strPos[0])- CAM_WIDTH / 2) * CAM_SCALE, (CAM_HEIGHT / 2 - float.Parse(strPos[1])) * CAM_SCALE);
+        Vector2 pos = new((float.Parse(strPos[0]) - CAM_WIDTH / 2) * CAM_SCALE, (CAM_HEIGHT / 2 - float.Parse(strPos[1])) * CAM_SCALE);
 
         markerPos[objIndex] = new Vector3(pos.x, pos.y, 0);
 
