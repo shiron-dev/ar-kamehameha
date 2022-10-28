@@ -44,6 +44,11 @@ public class MainController : MonoBehaviour
     private const float CHARGE_TIME = 1.5f;
     private float chargeTime = 0;
 
+    [SerializeField]
+    private GameObject beamMusic;
+    [SerializeField]
+    private GameObject chargeMusic;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -97,6 +102,16 @@ public class MainController : MonoBehaviour
                         kamehame_beam.SetActive(true);
                         kamehame_beam.transform.rotation = Quaternion.Euler(0, hX > sX ? 0 : 180, 0);
                     }
+                }
+                if (kamehame_beam.activeSelf)
+                {
+                    beamMusic.SetActive(true);
+                    chargeMusic.SetActive(false);
+                }
+                else
+                {
+                    beamMusic.SetActive(false);
+                    chargeMusic.SetActive(true);
                 }
             }
         }
