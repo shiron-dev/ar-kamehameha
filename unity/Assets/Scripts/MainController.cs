@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Timeline;
 using UnityEngine;
 
 public class MainController : MonoBehaviour
 {
-    private const int MARKER_NUM = 11;
+    private const int MARKER_NUM = 17;
 
     [SerializeField]
     private string UDP_IP = "127.0.0.1";
@@ -26,14 +27,9 @@ public class MainController : MonoBehaviour
     private GameObject markerPrefab;
 
     [SerializeField]
-    private Transform headTF;
+    private float triggerDist = 0.2f;
     [SerializeField]
-    private Transform headScale;
-
-    [SerializeField]
-    private float headRatio = 1.5f;
-
-    private Vector3 faceWay;
+    private GameObject kamehameha;
 
     // Start is called before the first frame update
     void Start()
@@ -42,11 +38,13 @@ public class MainController : MonoBehaviour
         udpController.Received += ReseiveUDP;
         udpController.ListenStart();
 
+        /*
         for (int i = 0; i < MARKER_NUM; i++)
         {
             GameObject obj = Instantiate(markerPrefab);
             markerTF.Add(obj.transform);
         }
+        */
     }
 
     // Update is called once per frame
@@ -59,11 +57,20 @@ public class MainController : MonoBehaviour
                 markerTF[i].transform.localPosition = markerPos[i];
             }
         }
-        float top = (markerPos[1].y + markerPos[2].y) / 2;
-        float bottom = markerPos[10].y;
-        float size = Mathf.Abs(top - bottom);
-        headTF.localPosition = new Vector3(markerPos[0].x, top + size * (headRatio - 1), 0);
-        headScale.localScale = new Vector3(size, size, size);
+
+        // 左右の距離確認
+        if (markerPos[9] != Vector3.zero)
+        {
+            if(triggerDist >= Vector3.Distance(markerPos[9], markerPos[10]))
+            {
+                Debug.Log("TRIGGERD");
+                kamehameha.SetActive(true);
+            }
+            else
+            {
+                kamehameha.SetActive(false);
+            }
+        }
     }
 
     private void OnDestroy()
@@ -79,11 +86,6 @@ public class MainController : MonoBehaviour
         string[] parseMsg = strMsg.Split(":");
         int objIndex = int.Parse(parseMsg[0]);
         string[] strPos = parseMsg[1].Split(",");
-        if(objIndex == 101)
-        {
-            faceWay = new(float.Parse(strPos[0]), float.Parse(strPos[1]), float.Parse(strPos[2]));
-            return;
-        }
         Vector2 pos = new((float.Parse(strPos[0])- CAM_WIDTH / 2) * CAM_SCALE, (CAM_HEIGHT / 2 - float.Parse(strPos[1])) * CAM_SCALE);
 
         markerPos[objIndex] = new Vector3(pos.x, pos.y, 0);
