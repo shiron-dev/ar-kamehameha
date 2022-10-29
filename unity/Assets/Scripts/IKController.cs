@@ -5,7 +5,9 @@ using UnityEngine;
 public class IKController : MonoBehaviour
 {
     private const float BODY_TILT_RATE = 50;
+    [SerializeField]
     private float modelSholderHeight = 1.35f / 4;
+    [SerializeField]
     private float standardPosition = 0;
 
     [System.Serializable]
@@ -31,6 +33,9 @@ public class IKController : MonoBehaviour
 
     [SerializeField] private GameObject ground;
 
+    [SerializeField] private bool reSize = true;
+    private const float UNITY_CHAN_SHOULDER_SIZE = 0.4f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -53,11 +58,16 @@ public class IKController : MonoBehaviour
 
     void Update()
     {
+        if (reSize && ikBodyBones.LeftShoulder.position != Vector3.zero && ikBodyBones.RightShoulder.position != Vector3.zero)
+        {
+            transform.localScale = Vector3.one * Mathf.Abs(ikBodyBones.LeftShoulder.position.x - ikBodyBones.RightShoulder.position.x) / UNITY_CHAN_SHOULDER_SIZE;
+        }
 
         if (ikBodyBones.LeftShoulder.position != Vector3.zero && ikBodyBones.RightShoulder.position != Vector3.zero)
         {
             transform.position = new Vector3((ikBodyBones.LeftShoulder.position.x - (ikBodyBones.LeftShoulder.position.x - ikBodyBones.RightShoulder.position.x) / 2) - standardPosition,
-                (ikBodyBones.LeftShoulder.position.y + ikBodyBones.RightShoulder.position.y) / 2 - modelSholderHeight, (ikBodyBones.LeftShoulder.position.z + ikBodyBones.RightShoulder.position.z)/2);
+                (ikBodyBones.LeftShoulder.position.y + ikBodyBones.RightShoulder.position.y) / 2 - modelSholderHeight * transform.localScale.x, 0);
+            //(ikBodyBones.LeftShoulder.position.z + ikBodyBones.RightShoulder.position.z)/2);
         }
     }
 
@@ -91,10 +101,10 @@ public class IKController : MonoBehaviour
     {
         Debug.Log("IK");
         animator.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1);
-        animator.SetIKPosition(AvatarIKGoal.LeftFoot, new Vector3(transform.position.x + 0.5f, 0, ground.transform.position.z));
+        animator.SetIKPosition(AvatarIKGoal.LeftFoot, new Vector3(transform.position.x + 0.5f, ground.transform.position.y, ground.transform.position.z));
 
         animator.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1);
-        animator.SetIKPosition(AvatarIKGoal.RightFoot, new Vector3(transform.position.x - 0.5f, 0, ground.transform.position.z));
+        animator.SetIKPosition(AvatarIKGoal.RightFoot, new Vector3(transform.position.x - 0.5f, ground.transform.position.y, ground.transform.position.z));
     }
 
     private void BoneLookAt(Transform objectTF, Transform targetTF)

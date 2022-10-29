@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -244,7 +244,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 388970105}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -3}
+  m_LocalPosition: {x: 0, y: 0, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -637,7 +637,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 729398961}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -899,6 +899,11 @@ MonoBehaviour:
   kamehame_beam: {fileID: 729398961}
   beamMusic: {fileID: 591905795}
   chargeMusic: {fileID: 1240477265}
+  unityChan: {fileID: 1311705289}
+  tfDist: 6
+  fusionLRDist: 6
+  fusionUpperDist: 2
+  fusionStatus: 0
 --- !u!4 &953202899
 Transform:
   m_ObjectHideFlags: 0
@@ -5932,7 +5937,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1128087679}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8454,7 +8459,7 @@ Transform:
   m_GameObject: {fileID: 1311705289}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: -3}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 20, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1311282187}
@@ -9167,18 +9172,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29af5253ea8b848ecac2d27793206d2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  modelSholderHeight: 0.3375
+  standardPosition: 0
   ikBodyBones:
-    LeftHand: {fileID: 1348437006}
-    RightHand: {fileID: 487285691}
-    LeftElbow: {fileID: 1085513062}
-    RightElbow: {fileID: 784463861}
-    LeftShoulder: {fileID: 1612636783}
-    RightShoulder: {fileID: 2061042993}
+    LeftHand: {fileID: 487285691}
+    RightHand: {fileID: 1348437006}
+    LeftElbow: {fileID: 784463861}
+    RightElbow: {fileID: 1085513062}
+    LeftShoulder: {fileID: 2061042993}
+    RightShoulder: {fileID: 1612636783}
     Spine: {fileID: 0}
-    LeftFoot: {fileID: 0}
-    RightFoot: {fileID: 0}
-    LeftUpperLeg: {fileID: 0}
-    RightUpperLeg: {fileID: 0}
+    LeftFoot: {fileID: 2126817462}
+    RightFoot: {fileID: 801742909}
+    LeftUpperLeg: {fileID: 306701095}
+    RightUpperLeg: {fileID: 2095609950}
   boneCorrections:
     LeftHand: {x: 0, y: 0, z: 0}
     RightHand: {x: 0, y: 0, z: 0}
@@ -9192,6 +9199,7 @@ MonoBehaviour:
     LeftUpperLeg: {x: 0, y: 0, z: 0}
     RightUpperLeg: {x: 0, y: 0, z: 0}
   ground: {fileID: 1396622119}
+  reSize: 0
 --- !u!1 &1311705089
 GameObject:
   m_ObjectHideFlags: 0
@@ -13644,7 +13652,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1396622119}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -3}
+  m_LocalPosition: {x: 0, y: -21.9, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
