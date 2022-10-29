@@ -49,6 +49,14 @@ public class MainController : MonoBehaviour
     [SerializeField]
     private GameObject chargeMusic;
 
+    [SerializeField]
+    private GameObject unityChan;
+    [SerializeField]
+    private float tfDist = 6f;
+
+    private float unityChanDisTime = 0;
+    private const float UNITY_CHAN_DIS_TIME = 1f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -95,6 +103,12 @@ public class MainController : MonoBehaviour
                 chargeTime += Time.deltaTime;
                 if (chargeTime >= CHARGE_TIME)
                 {
+                    // 変身処理
+                    if(((markerPos[5].y + markerPos[6].y) / 2) -((markerPos[9].y + markerPos[10].y) / 2) >= tfDist)
+                    {
+                        unityChan.SetActive(!unityChan.activeSelf);
+                    }
+                    // 正規の処理
                     float hX = (markerPos[9].x + markerPos[10].x) / 2;
                     float sX = (markerPos[5].x + markerPos[6].x) / 2;
                     if (releaseDist <= Mathf.Abs(hX - sX))
@@ -115,6 +129,17 @@ public class MainController : MonoBehaviour
                 }
             }
         }
+        if (markerPos[5] == Vector3.zero){
+            unityChanDisTime += Time.deltaTime;
+            if (unityChanDisTime >= UNITY_CHAN_DIS_TIME)
+            {
+                unityChan.SetActive(false);
+            }
+        }
+        else
+        {
+            unityChanDisTime = 0;
+        }
         kamehame_charge.transform.localScale = chargeSize * (1 - disChargeTime / DIS_CHARGE_TIME);
     }
 
@@ -131,7 +156,14 @@ public class MainController : MonoBehaviour
         string[] parseMsg = strMsg.Split(":");
         int objIndex = int.Parse(parseMsg[0]);
         string[] strPos = parseMsg[1].Split(",");
-        Vector2 pos = new((float.Parse(strPos[0]) - CAM_WIDTH / 2) * CAM_SCALE, (CAM_HEIGHT / 2 - float.Parse(strPos[1])) * CAM_SCALE);
+        float x = float.Parse(strPos[0]);
+        float y = float.Parse(strPos[1]);
+        if(x == 0 && y == 0)
+        {
+            markerPos[objIndex] = Vector3.zero;
+            return;
+        }
+        Vector2 pos = new((x - CAM_WIDTH / 2) * CAM_SCALE, (CAM_HEIGHT / 2 - y) * CAM_SCALE);
 
         markerPos[objIndex] = new Vector3(pos.x, pos.y, 0);
 

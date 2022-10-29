@@ -24,6 +24,7 @@ public class IKController : MonoBehaviour
         public Type RightUpperLeg;
     }
     [SerializeField] private BodyBones<Transform> ikBodyBones;
+    private BodyBones<Vector3> ikLastBones;
     private BodyBones<Transform> modelBodyBones;
     [SerializeField] private BodyBones<Vector3> boneCorrections;
     private Animator animator;
@@ -83,6 +84,7 @@ public class IKController : MonoBehaviour
         BoneLookAt(modelBodyBones.RightFoot, ikBodyBones.RightFoot, boneCorrections.RightFoot);
         BoneLookAt(modelBodyBones.RightUpperLeg, ikBodyBones.RightUpperLeg, boneCorrections.RightUpperLeg);
         */
+
     }
 
     void OnAnimatorIK()
@@ -114,5 +116,24 @@ public class IKController : MonoBehaviour
     {
         modelSholderHeight = (ikBodyBones.LeftShoulder.position.y + ikBodyBones.RightShoulder.position.y) / 2;
         standardPosition = ikBodyBones.LeftShoulder.position.x - (ikBodyBones.LeftShoulder.position.x - ikBodyBones.RightShoulder.position.x) / 2;
+    }
+
+    private Vector3 AverageV3(Vector3 v1,Vector3 v2)
+    {
+        return new((v1.x + v2.x) / 2, (v1.y + v2.y) / 2, (v1.z + v2.z) / 2);
+    }
+
+    private void SetLastBones()
+    {
+        ikLastBones.LeftHand = ikBodyBones.LeftElbow.position;
+        ikLastBones.RightHand = ikBodyBones.LeftElbow.position;
+        ikLastBones.LeftElbow = ikBodyBones.LeftElbow.position;
+        ikLastBones.RightElbow = ikBodyBones.LeftElbow.position;
+        ikLastBones.LeftElbow = ikBodyBones.LeftElbow.position;
+        ikLastBones.LeftElbow = ikBodyBones.LeftElbow.position;
+        ikLastBones.LeftElbow = ikBodyBones.LeftElbow.position;
+        ikLastBones.LeftElbow = ikBodyBones.LeftElbow.position;
+        ikLastBones.LeftElbow = ikBodyBones.LeftElbow.position;
+        ikLastBones.LeftElbow = ikBodyBones.LeftElbow.position;
     }
 }
