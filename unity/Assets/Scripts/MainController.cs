@@ -70,6 +70,8 @@ public class MainController : MonoBehaviour
     private const float DIS_FUSION_TIME = 1.5f;
     private float disFusionTime = 0;
 
+    public bool noMove = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -91,11 +93,16 @@ public class MainController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        noMove = true;
         for (int i = 0; i < MARKER_NUM; i++)
         {
             if (markerTF[i] != null && markerPos[i] != Vector3.zero)
             {
                 markerTF[i].transform.localPosition = markerPos[i];
+            }
+            if (markerPos[i] == Vector3.zero)
+            {
+                noMove = false;
             }
         }
 
